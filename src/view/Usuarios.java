@@ -6,6 +6,7 @@ import javax.swing.JDialog;
 import java.awt.Toolkit;
 import java.awt.Rectangle;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
@@ -13,8 +14,16 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
+
+import model.DAO;
+
 import java.awt.Cursor;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.awt.event.ActionEvent;
 
 public class Usuarios extends JDialog {
 
@@ -22,10 +31,10 @@ public class Usuarios extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JPasswordField passwordField;
+	private JTextField txtUsuId;
+	private JTextField txtUsuNome;
+	private JTextField txtUsuLogin;
+	private JPasswordField txtUsuSenha;
 
 	/**
 	 * Launch the application.
@@ -59,19 +68,19 @@ public class Usuarios extends JDialog {
 		lblNewLabel.setBounds(36, 30, 17, 14);
 		getContentPane().add(lblNewLabel);
 		
-		textField = new JTextField();
-		textField.setBounds(85, 27, 86, 20);
-		getContentPane().add(textField);
-		textField.setColumns(10);
+		txtUsuId = new JTextField();
+		txtUsuId.setBounds(85, 27, 86, 20);
+		getContentPane().add(txtUsuId);
+		txtUsuId.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Usu\u00E1rio");
 		lblNewLabel_1.setBounds(36, 58, 46, 14);
 		getContentPane().add(lblNewLabel_1);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(85, 55, 162, 20);
-		getContentPane().add(textField_1);
+		txtUsuNome = new JTextField();
+		txtUsuNome.setColumns(10);
+		txtUsuNome.setBounds(85, 55, 162, 20);
+		getContentPane().add(txtUsuNome);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Login");
 		lblNewLabel_1_1.setBounds(36, 86, 46, 14);
@@ -81,67 +90,123 @@ public class Usuarios extends JDialog {
 		lblNewLabel_1_2.setBounds(36, 114, 46, 14);
 		getContentPane().add(lblNewLabel_1_2);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(85, 83, 162, 20);
-		getContentPane().add(textField_2);
+		txtUsuLogin = new JTextField();
+		txtUsuLogin.setColumns(10);
+		txtUsuLogin.setBounds(85, 83, 162, 20);
+		getContentPane().add(txtUsuLogin);
 		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(85, 111, 162, 20);
-		getContentPane().add(passwordField);
+		txtUsuSenha = new JPasswordField();
+		txtUsuSenha.setBounds(85, 111, 162, 20);
+		getContentPane().add(txtUsuSenha);
 		
 		JLabel lblNewLabel_1_2_1 = new JLabel("Perfil");
 		lblNewLabel_1_2_1.setBounds(36, 142, 46, 14);
 		getContentPane().add(lblNewLabel_1_2_1);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"", "Admin", "User"}));
-		comboBox.setBounds(85, 138, 86, 22);
-		getContentPane().add(comboBox);
+		cboUsuPerfil = new JComboBox();
+		cboUsuPerfil.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		cboUsuPerfil.setModel(new DefaultComboBoxModel(new String[] {"", "admin", "user"}));
+		cboUsuPerfil.setBounds(85, 138, 86, 22);
+		getContentPane().add(cboUsuPerfil);
 		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setDefaultCapable(false);
-		btnNewButton.setContentAreaFilled(false);
-		btnNewButton.setBorderPainted(false);
-		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton.setBackground(new Color(240, 240, 240));
-		btnNewButton.setToolTipText("Adicionar Usu\u00E1rio");
-		btnNewButton.setIcon(new ImageIcon(Usuarios.class.getResource("/img/adicionar.png")));
-		btnNewButton.setBounds(35, 171, 64, 64);
-		getContentPane().add(btnNewButton);
+		JButton btnAdicionar = new JButton("");
+		btnAdicionar.setDefaultCapable(false);
+		btnAdicionar.setContentAreaFilled(false);
+		btnAdicionar.setBorderPainted(false);
+		btnAdicionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnAdicionar.setBackground(new Color(240, 240, 240));
+		btnAdicionar.setToolTipText("Adicionar Usu\u00E1rio");
+		btnAdicionar.setIcon(new ImageIcon(Usuarios.class.getResource("/img/adicionar.png")));
+		btnAdicionar.setBounds(35, 171, 64, 64);
+		getContentPane().add(btnAdicionar);
 		
-		JButton btnNewButton_1 = new JButton("");
-		btnNewButton_1.setDefaultCapable(false);
-		btnNewButton_1.setContentAreaFilled(false);
-		btnNewButton_1.setBorderPainted(false);
-		btnNewButton_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton_1.setBackground(UIManager.getColor("Button.background"));
-		btnNewButton_1.setToolTipText("Remover Usu\u00E1rio");
-		btnNewButton_1.setIcon(new ImageIcon(Usuarios.class.getResource("/img/remover.png")));
-		btnNewButton_1.setBounds(109, 171, 64, 64);
-		getContentPane().add(btnNewButton_1);
+		JButton btnExcluir = new JButton("");
+		btnExcluir.setDefaultCapable(false);
+		btnExcluir.setContentAreaFilled(false);
+		btnExcluir.setBorderPainted(false);
+		btnExcluir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnExcluir.setBackground(UIManager.getColor("Button.background"));
+		btnExcluir.setToolTipText("Remover Usu\u00E1rio");
+		btnExcluir.setIcon(new ImageIcon(Usuarios.class.getResource("/img/remover.png")));
+		btnExcluir.setBounds(109, 171, 64, 64);
+		getContentPane().add(btnExcluir);
 		
-		JButton btnNewButton_2 = new JButton("");
-		btnNewButton_2.setDefaultCapable(false);
-		btnNewButton_2.setContentAreaFilled(false);
-		btnNewButton_2.setBorderPainted(false);
-		btnNewButton_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton_2.setBackground(UIManager.getColor("Button.background"));
-		btnNewButton_2.setToolTipText("Alterar Usu\u00E1rio");
-		btnNewButton_2.setIcon(new ImageIcon(Usuarios.class.getResource("/img/alterar.png")));
-		btnNewButton_2.setBounds(183, 171, 64, 64);
-		getContentPane().add(btnNewButton_2);
+		JButton btnAlterar = new JButton("");
+		btnAlterar.setDefaultCapable(false);
+		btnAlterar.setContentAreaFilled(false);
+		btnAlterar.setBorderPainted(false);
+		btnAlterar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnAlterar.setBackground(UIManager.getColor("Button.background"));
+		btnAlterar.setToolTipText("Alterar Usu\u00E1rio");
+		btnAlterar.setIcon(new ImageIcon(Usuarios.class.getResource("/img/alterar.png")));
+		btnAlterar.setBounds(183, 171, 64, 64);
+		getContentPane().add(btnAlterar);
 		
-		JButton btnNewButton_3 = new JButton("");
-		btnNewButton_3.setContentAreaFilled(false);
-		btnNewButton_3.setBorderPainted(false);
-		btnNewButton_3.setSelected(true);
-		btnNewButton_3.setToolTipText("Pesquisar");
-		btnNewButton_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton_3.setIcon(new ImageIcon(Usuarios.class.getResource("/img/search1.png")));
-		btnNewButton_3.setBounds(181, 15, 32, 32);
-		getContentPane().add(btnNewButton_3);
+		JButton btnPesquisar = new JButton("");
+		btnPesquisar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pesquisarUsuario();
+			}
+		});
+		btnPesquisar.setContentAreaFilled(false);
+		btnPesquisar.setBorderPainted(false);
+		btnPesquisar.setSelected(true);
+		btnPesquisar.setToolTipText("Pesquisar");
+		btnPesquisar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnPesquisar.setIcon(new ImageIcon(Usuarios.class.getResource("/img/search1.png")));
+		btnPesquisar.setBounds(181, 15, 32, 32);
+		getContentPane().add(btnPesquisar);
 
 	}// Fim do construtor
-}
+	
+	DAO dao = new DAO();
+	private JComboBox cboUsuPerfil;
+	/**
+	 * Método responsável pela pesquisa de usuários
+	 */
+	private void pesquisarUsuario() {
+		// Validação
+		if (txtUsuId.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Digite o ID do usuário");
+			txtUsuId.requestFocus();
+		} else {
+			// Lógica principal
+			// Query (instrução SQL)
+			String read = "select * from usuarios where idusu = ?";
+			// tratar exceções sempre que lidar com o banco
+			try {
+				// Estabelecer a conexão
+				Connection con = dao.conectar();
+				// Preparar a execução da query
+				PreparedStatement pst = con.prepareStatement(read);
+				// Setar o argumento (id)
+				// Substituir o ? pelo conteúdo da caixa de texto
+				pst.setString(1, txtUsuId.getText());
+				// Executar a query e exibir o resultado no formulario
+				ResultSet rs = pst.executeQuery();
+				// Validação (existência de usuário)
+				// rs.next() -> existência de usuário
+				if (rs.next()) {
+					// Preencher(setar) os campos do formulário
+					txtUsuNome.setText(rs.getString(2));
+					txtUsuLogin.setText(rs.getString(3));
+					txtUsuSenha.setText(rs.getString(4));
+					cboUsuPerfil.setSelectedItem(rs.getString(5));
+				} else {
+					JOptionPane.showMessageDialog(null, "Usuário não cadastrado");
+				}
+				// NUNCA esquecer de encerrar a conexão
+				con.close();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+	}
+	
+}// Fim do código
+
+
+
+
+
+
