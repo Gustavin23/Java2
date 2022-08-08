@@ -265,6 +265,8 @@ public class Usuarios extends JDialog {
 				con.close();
 			} catch(SQLIntegrityConstraintViolationException ex) {
 				JOptionPane.showMessageDialog(null, "Login em uso.\nEscolha outro login.");
+				txtUsuLogin.setText(null);
+				txtUsuLogin.requestFocus();
 			} catch (Exception e) {
 				System.out.println(e);
 			}
