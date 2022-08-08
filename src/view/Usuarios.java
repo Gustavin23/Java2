@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
+import Atxy2k.CustomTextField.RestrictedTextField;
 import model.DAO;
 
 import java.awt.Cursor;
@@ -23,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.awt.event.ActionEvent;
 
 public class Usuarios extends JDialog {
@@ -63,53 +65,58 @@ public class Usuarios extends JDialog {
 		setResizable(false);
 		setBounds(150, 150, 450, 300);
 		getContentPane().setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel("ID");
 		lblNewLabel.setBounds(36, 30, 17, 14);
 		getContentPane().add(lblNewLabel);
-		
+
 		txtUsuId = new JTextField();
 		txtUsuId.setBounds(85, 27, 86, 20);
 		getContentPane().add(txtUsuId);
 		txtUsuId.setColumns(10);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Usu\u00E1rio");
 		lblNewLabel_1.setBounds(36, 58, 46, 14);
 		getContentPane().add(lblNewLabel_1);
-		
+
 		txtUsuNome = new JTextField();
 		txtUsuNome.setColumns(10);
 		txtUsuNome.setBounds(85, 55, 162, 20);
 		getContentPane().add(txtUsuNome);
-		
+
 		JLabel lblNewLabel_1_1 = new JLabel("Login");
 		lblNewLabel_1_1.setBounds(36, 86, 46, 14);
 		getContentPane().add(lblNewLabel_1_1);
-		
+
 		JLabel lblNewLabel_1_2 = new JLabel("Senha");
 		lblNewLabel_1_2.setBounds(36, 114, 46, 14);
 		getContentPane().add(lblNewLabel_1_2);
-		
+
 		txtUsuLogin = new JTextField();
 		txtUsuLogin.setColumns(10);
 		txtUsuLogin.setBounds(85, 83, 162, 20);
 		getContentPane().add(txtUsuLogin);
-		
+
 		txtUsuSenha = new JPasswordField();
-		txtUsuSenha.setBounds(85, 111, 162, 20);
+		txtUsuSenha.setBounds(85, 111, 225, 20);
 		getContentPane().add(txtUsuSenha);
-		
+
 		JLabel lblNewLabel_1_2_1 = new JLabel("Perfil");
 		lblNewLabel_1_2_1.setBounds(36, 142, 46, 14);
 		getContentPane().add(lblNewLabel_1_2_1);
-		
+
 		cboUsuPerfil = new JComboBox();
 		cboUsuPerfil.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		cboUsuPerfil.setModel(new DefaultComboBoxModel(new String[] {"", "admin", "user"}));
+		cboUsuPerfil.setModel(new DefaultComboBoxModel(new String[] { "", "admin", "user" }));
 		cboUsuPerfil.setBounds(85, 138, 86, 22);
 		getContentPane().add(cboUsuPerfil);
-		
+
 		JButton btnAdicionar = new JButton("");
+		btnAdicionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				adicionarUsuario();
+			}
+		});
 		btnAdicionar.setDefaultCapable(false);
 		btnAdicionar.setContentAreaFilled(false);
 		btnAdicionar.setBorderPainted(false);
@@ -119,7 +126,7 @@ public class Usuarios extends JDialog {
 		btnAdicionar.setIcon(new ImageIcon(Usuarios.class.getResource("/img/adicionar.png")));
 		btnAdicionar.setBounds(35, 171, 64, 64);
 		getContentPane().add(btnAdicionar);
-		
+
 		JButton btnExcluir = new JButton("");
 		btnExcluir.setDefaultCapable(false);
 		btnExcluir.setContentAreaFilled(false);
@@ -130,7 +137,7 @@ public class Usuarios extends JDialog {
 		btnExcluir.setIcon(new ImageIcon(Usuarios.class.getResource("/img/remover.png")));
 		btnExcluir.setBounds(109, 171, 64, 64);
 		getContentPane().add(btnExcluir);
-		
+
 		JButton btnAlterar = new JButton("");
 		btnAlterar.setDefaultCapable(false);
 		btnAlterar.setContentAreaFilled(false);
@@ -141,7 +148,7 @@ public class Usuarios extends JDialog {
 		btnAlterar.setIcon(new ImageIcon(Usuarios.class.getResource("/img/alterar.png")));
 		btnAlterar.setBounds(183, 171, 64, 64);
 		getContentPane().add(btnAlterar);
-		
+
 		JButton btnPesquisar = new JButton("");
 		btnPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -157,10 +164,26 @@ public class Usuarios extends JDialog {
 		btnPesquisar.setBounds(181, 15, 32, 32);
 		getContentPane().add(btnPesquisar);
 
+		// Validação com o uso da biblioteca Atxy2k
+		// txtUsuId
+		RestrictedTextField validarId = new RestrictedTextField(txtUsuId);
+		validarId.setOnlyNums(true);
+		validarId.setLimit(4);
+		// txtUsuNome
+		RestrictedTextField validarNome = new RestrictedTextField(txtUsuNome);
+		validarNome.setLimit(50);
+		// txtUsuLogin
+		RestrictedTextField validarLogin = new RestrictedTextField(txtUsuLogin);
+		validarLogin.setLimit(50);
+		// txtUsuPassword
+		RestrictedTextField validarSenha = new RestrictedTextField(txtUsuSenha);
+		validarSenha.setLimit(255);
+		
 	}// Fim do construtor
-	
+
 	DAO dao = new DAO();
 	private JComboBox cboUsuPerfil;
+
 	/**
 	 * Método responsável pela pesquisa de usuários
 	 */
@@ -202,11 +225,58 @@ public class Usuarios extends JDialog {
 			}
 		}
 	}
+	/**
+	 * Método responsável por adicionar um novo usuário no banco
+	 */
+	private void adicionarUsuario() {
+		String capturaSenha = new String(txtUsuSenha.getPassword());
+		// Validação
+		
+		if (txtUsuNome.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Digite o Nome do usuário");
+			txtUsuNome.requestFocus();
+		}	else if (txtUsuLogin.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Digite o login do usuário");
+			txtUsuLogin.requestFocus();
+		}	else if (txtUsuSenha.getPassword().length == 0) {
+			JOptionPane.showMessageDialog(null, "Digite a senha do usuário");
+			txtUsuSenha.requestFocus();
+		}	else if (cboUsuPerfil.getSelectedItem().equals("")) {
+			JOptionPane.showMessageDialog(null, "Selecione o perfil do usuário");
+			cboUsuPerfil.requestFocus();
+		}	else {
+			// Lógica Principal
+			String create = "insert into usuarios(usuario,login,senha,perfil) values(?,?,md5(?),?)";
+			try {
+				// Estabelecer a conexão
+				Connection con = dao.conectar();
+				// Preparar a execução da query
+				PreparedStatement pst = con.prepareStatement(create);
+				// Substituir o ???? pelo conteúdo da caixa de texto
+				pst.setString(1, txtUsuNome.getText());
+				pst.setString(2, txtUsuLogin.getText());
+				pst.setString(3, txtUsuSenha.getText());
+				pst.setString(4, cboUsuPerfil.getSelectedItem().toString());
+				// Executar a query e inserir o usuário no banco
+				pst.executeUpdate();
+				// Encerrar a conexão
+				JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso");
+				limparCampos();
+				con.close();
+			} catch(SQLIntegrityConstraintViolationException ex) {
+				JOptionPane.showMessageDialog(null, "Login em uso.\nEscolha outro login.");
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+
+		}
+			
+	}
 	
+	private void limparCampos() {
+		txtUsuNome.setText(null);
+		txtUsuLogin.setText(null);
+		txtUsuSenha.setText(null);
+		cboUsuPerfil.setSelectedItem("");
+	}
 }// Fim do código
-
-
-
-
-
-
