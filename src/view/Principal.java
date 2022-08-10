@@ -27,6 +27,8 @@ public class Principal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblData;
+	private JButton btnUsuarios;
+	private JButton btnRelatorios;
 
 	/**
 	 * Launch the application.
@@ -105,21 +107,22 @@ public class Principal extends JFrame {
 		btnNewButton_4.setBounds(53, 167, 128, 128);
 		contentPane.add(btnNewButton_4);
 		
-		JButton btnNewButton_5 = new JButton("");
-		btnNewButton_5.setDefaultCapable(false);
-		btnNewButton_5.setContentAreaFilled(false);
-		btnNewButton_5.setBorderPainted(false);
-		btnNewButton_5.addActionListener(new ActionListener() {
+		btnRelatorios = new JButton("");
+		btnRelatorios.setEnabled(false);
+		btnRelatorios.setDefaultCapable(false);
+		btnRelatorios.setContentAreaFilled(false);
+		btnRelatorios.setBorderPainted(false);
+		btnRelatorios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Relatorio relatorios = new Relatorio();
 				relatorios.setVisible(true);
 			}
 		});
-		btnNewButton_5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton_5.setIcon(new ImageIcon(Principal.class.getResource("/img/Relatorio.png")));
-		btnNewButton_5.setToolTipText("Relat\u00F3rio");
-		btnNewButton_5.setBounds(229, 167, 128, 128);
-		contentPane.add(btnNewButton_5);
+		btnRelatorios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRelatorios.setIcon(new ImageIcon(Principal.class.getResource("/img/Relatorio.png")));
+		btnRelatorios.setToolTipText("Relat\u00F3rio");
+		btnRelatorios.setBounds(229, 167, 128, 128);
+		contentPane.add(btnRelatorios);
 		
 		JButton btnNewButton_6 = new JButton("");
 		btnNewButton_6.setDefaultCapable(false);
@@ -137,11 +140,12 @@ public class Principal extends JFrame {
 		btnNewButton_6.setBounds(412, 167, 128, 128);
 		contentPane.add(btnNewButton_6);
 		
-		JButton btnNewButton_7 = new JButton("");
-		btnNewButton_7.setDefaultCapable(false);
-		btnNewButton_7.setContentAreaFilled(false);
-		btnNewButton_7.setBorderPainted(false);
-		btnNewButton_7.addActionListener(new ActionListener() {
+		btnUsuarios = new JButton("");
+		btnUsuarios.setEnabled(false);
+		btnUsuarios.setDefaultCapable(false);
+		btnUsuarios.setContentAreaFilled(false);
+		btnUsuarios.setBorderPainted(false);
+		btnUsuarios.addActionListener(new ActionListener() {
 			// Evento clicar no botão
 			public void actionPerformed(ActionEvent e) {
 				// Link para o jDialog
@@ -149,12 +153,12 @@ public class Principal extends JFrame {
 				usuarios.setVisible(true);
 			}
 		});
-		btnNewButton_7.setBackground(SystemColor.control);
-		btnNewButton_7.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton_7.setIcon(new ImageIcon(Principal.class.getResource("/img/Cadastro.png")));
-		btnNewButton_7.setToolTipText("Usu\u00E1rios");
-		btnNewButton_7.setBounds(53, 11, 128, 128);
-		contentPane.add(btnNewButton_7);
+		btnUsuarios.setBackground(SystemColor.control);
+		btnUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnUsuarios.setIcon(new ImageIcon(Principal.class.getResource("/img/Cadastro.png")));
+		btnUsuarios.setToolTipText("Usu\u00E1rios");
+		btnUsuarios.setBounds(53, 11, 128, 128);
+		contentPane.add(btnUsuarios);
 		
 		JButton btnNewButton_6_1 = new JButton("");
 		btnNewButton_6_1.setDefaultCapable(false);
