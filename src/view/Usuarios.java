@@ -26,6 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.awt.event.ActionEvent;
+import javax.swing.JCheckBox;
 
 public class Usuarios extends JDialog {
 
@@ -67,12 +68,12 @@ public class Usuarios extends JDialog {
 		getContentPane().setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("ID");
-		lblNewLabel.setBounds(46, 89, 17, 14);
+		lblNewLabel.setBounds(46, 87, 17, 14);
 		getContentPane().add(lblNewLabel);
 
 		txtUsuId = new JTextField();
 		txtUsuId.setEditable(false);
-		txtUsuId.setBounds(85, 86, 86, 20);
+		txtUsuId.setBounds(85, 83, 86, 20);
 		getContentPane().add(txtUsuId);
 		txtUsuId.setColumns(10);
 
@@ -81,7 +82,6 @@ public class Usuarios extends JDialog {
 		getContentPane().add(lblNewLabel_1);
 
 		txtUsuNome = new JTextField();
-		txtUsuNome.setEditable(false);
 		txtUsuNome.setColumns(10);
 		txtUsuNome.setBounds(85, 55, 136, 20);
 		getContentPane().add(txtUsuNome);
@@ -100,7 +100,6 @@ public class Usuarios extends JDialog {
 		getContentPane().add(txtUsuLogin);
 
 		txtUsuSenha = new JPasswordField();
-		txtUsuSenha.setEditable(false);
 		txtUsuSenha.setBounds(85, 111, 207, 20);
 		getContentPane().add(txtUsuSenha);
 
@@ -109,7 +108,6 @@ public class Usuarios extends JDialog {
 		getContentPane().add(lblNewLabel_1_2_1);
 
 		cboUsuPerfil = new JComboBox();
-		cboUsuPerfil.setEnabled(false);
 		cboUsuPerfil.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		cboUsuPerfil.setModel(new DefaultComboBoxModel(new String[] { "", "admin", "user" }));
 		cboUsuPerfil.setBounds(85, 138, 86, 22);
@@ -153,7 +151,12 @@ public class Usuarios extends JDialog {
 		btnAlterar.setEnabled(false);
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				alterarUsuario();
+				// lógica para verificar o checkbox
+				if (chkSenha.isSelected()) {
+					alterarUsuarioSenha();
+				} else {
+					alterarUsuario();
+				}
 			}
 		});
 		btnAlterar.setDefaultCapable(false);
@@ -194,6 +197,18 @@ public class Usuarios extends JDialog {
 		validarLogin.setLimit(50);
 		// txtUsuPassword
 		RestrictedTextField validarSenha = new RestrictedTextField(txtUsuSenha);
+		
+		chkSenha = new JCheckBox("Alterar Senha");
+		chkSenha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtUsuSenha.setText(null);
+				txtUsuSenha.requestFocus();
+				txtUsuSenha.setEditable(true);
+			}
+		});
+		chkSenha.setVisible(false);
+		chkSenha.setBounds(298, 110, 136, 23);
+		getContentPane().add(chkSenha);
 		validarSenha.setLimit(255);
 		
 	}// Fim do construtor
@@ -203,6 +218,7 @@ public class Usuarios extends JDialog {
 	private JButton btnAdicionar;
 	private JButton btnExcluir;
 	private JButton btnAlterar;
+	private JCheckBox chkSenha;
 
 	/**
 	 * Método responsável pela pesquisa de usuários
@@ -236,14 +252,12 @@ public class Usuarios extends JDialog {
 					txtUsuLogin.setText(rs.getString(3));
 					txtUsuSenha.setText(rs.getString(4));
 					cboUsuPerfil.setSelectedItem(rs.getString(5));
-					txtUsuNome.setEditable(true);
-					cboUsuPerfil.setEditable(true);
-					txtUsuSenha.setEditable(true);
 					btnAlterar.setEnabled(true);
 					btnExcluir.setEnabled(true);
+					chkSenha.setVisible(true);
+					txtUsuSenha.setEditable(false);
 				} else {
 					JOptionPane.showMessageDialog(null, "Usuário não cadastrado");
-					txtUsuLogin.setEditable(false);
 					txtUsuNome.setEditable(true);
 					cboUsuPerfil.setEnabled(true);
 					txtUsuSenha.setEditable(true);
@@ -308,11 +322,9 @@ public class Usuarios extends JDialog {
 	}
 	
 	/**
-	 * Método responsável por alterar os dados de um usuário no banco
+	 * Método responsável por alterar os dados de um usuário no banco exceto a senha
 	 */
 	private void alterarUsuario() {
-		String capturaSenha = new String(txtUsuSenha.getPassword());
-		// Validação
 		
 		if (txtUsuNome.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Digite o Nome do usuário");
@@ -328,7 +340,7 @@ public class Usuarios extends JDialog {
 			cboUsuPerfil.requestFocus();
 		}	else {
 			// Lógica Principal
-			String update = "update usuarios set usuario=?, login=?, senha=md5(?), perfil=? where idusu=?";
+			String update = "update usuarios set usuario=?, login=?, perfil=? where idusu=?";
 			try {
 				// Estabelecer a conexão
 				Connection con = dao.conectar();
@@ -337,9 +349,8 @@ public class Usuarios extends JDialog {
 				// Substituir o ???? pelo conteúdo da caixa de texto
 				pst.setString(1, txtUsuNome.getText());
 				pst.setString(2, txtUsuLogin.getText());
-				pst.setString(3, txtUsuSenha.getText());
-				pst.setString(4, cboUsuPerfil.getSelectedItem().toString());
-				pst.setString(5, txtUsuId.getText());
+				pst.setString(3, cboUsuPerfil.getSelectedItem().toString());
+				pst.setString(4, txtUsuId.getText());
 				// Executar a query e inserir o usuário no banco
 				pst.executeUpdate();
 				// Encerrar a conexão
@@ -357,6 +368,59 @@ public class Usuarios extends JDialog {
 		}
 			
 	}
+	
+	/**
+	 * Método responsável por alterar os dados de um usuário no banco e sua respectiva senha
+	 */
+	private void alterarUsuarioSenha() {
+		String capturaSenha = new String(txtUsuSenha.getPassword());
+		// Validação
+		
+		if (txtUsuNome.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Digite o Nome do usuário");
+			txtUsuNome.requestFocus();
+		}	else if (txtUsuLogin.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Digite o login do usuário");
+			txtUsuLogin.requestFocus();
+		}	else if (txtUsuSenha.getPassword().length == 0) {
+			JOptionPane.showMessageDialog(null, "Digite a senha do usuário");
+			txtUsuSenha.requestFocus();
+		}	else if (cboUsuPerfil.getSelectedItem().equals("")) {
+			JOptionPane.showMessageDialog(null, "Selecione o perfil do usuário");
+			cboUsuPerfil.requestFocus();
+		}	else {
+			// Lógica Principal
+			String update2 = "update usuarios set usuario=?, login=?, senha=md5(?), perfil=? where idusu=?";
+			try {
+				// Estabelecer a conexão
+				Connection con = dao.conectar();
+				// Preparar a execução da query
+				PreparedStatement pst = con.prepareStatement(update2);
+				// Substituir o ???? pelo conteúdo da caixa de texto
+				pst.setString(1, txtUsuNome.getText());
+				pst.setString(2, txtUsuLogin.getText());
+				pst.setString(3, capturaSenha);
+				pst.setString(4, cboUsuPerfil.getSelectedItem().toString());
+				pst.setString(5, txtUsuId.getText());
+
+				// Executar a query e inserir o usuário no banco
+				pst.executeUpdate();
+				// Encerrar a conexão
+				JOptionPane.showMessageDialog(null, "Usuário alterado com sucesso");
+				limparCampos();
+				con.close();
+			} catch(SQLIntegrityConstraintViolationException ex) {
+				JOptionPane.showMessageDialog(null, "Login em uso.\nEscolha outro login.");
+				txtUsuLogin.setText(null);
+				txtUsuLogin.requestFocus();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+
+		}
+			
+	}
+	
 	/**
 	 * Método responsável por excluir os dados de um usuário no banco
 	 */
@@ -389,17 +453,14 @@ public class Usuarios extends JDialog {
 		txtUsuNome.setText(null);
 		txtUsuLogin.setText(null);
 		txtUsuSenha.setText(null);
+		txtUsuSenha.setBackground(Color.white);
 		cboUsuPerfil.setSelectedItem("");
 		txtUsuId.setText(null);
-		btnAdicionar.setEnabled(true);
 		cboUsuPerfil.setSelectedItem("");
 		btnAdicionar.setEnabled(false);
 		btnAlterar.setEnabled(false);
 		btnExcluir.setEnabled(false);
-		txtUsuNome.setEditable(false);
-		txtUsuLogin.setEditable(true);
-		cboUsuPerfil.setEnabled(false);
-		txtUsuSenha.setEditable(false);
-		txtUsuLogin.requestFocus();
+		chkSenha.setVisible(false);
+		chkSenha.setSelected(false);
 	}
 }// Fim do código

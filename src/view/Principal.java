@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Font;
+import java.awt.Color;
 
 public class Principal extends JFrame {
 
@@ -27,8 +28,12 @@ public class Principal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblData;
-	private JButton btnUsuarios;
-	private JButton btnRelatorios;
+	// Atribuir o modificador publico para manipular estes objetos de outra classe
+	public JButton btnUsuarios;
+	public JButton btnRelatorios;
+	public JLabel lblUsuario;
+	public JPanel panelUsuario;
+	public JLabel lblLogin;
 
 	/**
 	 * Launch the application.
@@ -208,17 +213,29 @@ public class Principal extends JFrame {
 		btnNewButton_6_1_1.setBounds(412, 11, 128, 128);
 		contentPane.add(btnNewButton_6_1_1);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(SystemColor.scrollbar);
-		panel.setBounds(0, 510, 784, 51);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		panelUsuario = new JPanel();
+		panelUsuario.setBackground(SystemColor.scrollbar);
+		panelUsuario.setBounds(0, 510, 784, 51);
+		contentPane.add(panelUsuario);
+		panelUsuario.setLayout(null);
 		
 		lblData = new JLabel("");
 		lblData.setForeground(SystemColor.textHighlightText);
 		lblData.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblData.setBounds(515, 11, 259, 29);
-		panel.add(lblData);
+		panelUsuario.add(lblData);
 		lblData.setBackground(SystemColor.textHighlightText);
+		
+		lblUsuario = new JLabel("New label");
+		lblUsuario.setBackground(Color.BLACK);
+		lblUsuario.setForeground(Color.WHITE);
+		lblUsuario.setBounds(64, 11, 285, 14);
+		panelUsuario.add(lblUsuario);
+		
+		lblLogin = new JLabel("New label");
+		lblLogin.setForeground(Color.WHITE);
+		lblLogin.setBackground(Color.BLACK);
+		lblLogin.setBounds(64, 26, 285, 14);
+		panelUsuario.add(lblLogin);
 	}// fim do construtor
 }
