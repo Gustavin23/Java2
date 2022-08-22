@@ -311,7 +311,7 @@ public class Cliente extends JDialog {
 		btnPesquisar.setBounds(486, 37, 89, 23);
 		getContentPane().add(btnPesquisar);
 		
-		// Validaï¿½ï¿½o com o uso da biblioteca Atxy2k
+		// Validação com o uso da biblioteca Atxy2k
 		RestrictedTextField validarId = new RestrictedTextField(txtCliId);
 		validarId.setOnlyNums(true);
 		validarId.setLimit(4);
@@ -359,7 +359,7 @@ public class Cliente extends JDialog {
 	private JComboBox cboCliMarketing;
 	
 	/**
-	 * MÃ©todo responsavel por buscar o CEP
+	 * Método responsável por buscar o CEP
 	 */
 	private void buscarCEP() {
 		String logradouro = "";
@@ -393,12 +393,12 @@ public class Cliente extends JDialog {
 		        	if (resultado.equals("1")) {
 		
 		        	} else {
-		        		JOptionPane.showMessageDialog(null, "CEP nÃ£o encontrado");
+		        		JOptionPane.showMessageDialog(null, "CEP não encontrado");
 		        	}
 		        }
 
 		    }
-			// Setar Campo EndereÃ§o
+			// Setar Campo Endereço
 			txtCliEndereco.setText(tipoLogradouro + " " + logradouro);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -406,7 +406,7 @@ public class Cliente extends JDialog {
 	}
 	
 	/**
-	 * Mï¿½todo responsï¿½vel pela pesquisa avanï¿½ada do Fornecedor
+	 * Método responsável pela pesquisa avançada do Fornecedor
 	 * usando o nome de fantasia e a biblioteca rs2xml
 	 */
 	private void pesquisarClienteTabela() {
@@ -426,11 +426,11 @@ public class Cliente extends JDialog {
 	}
 	
 	/**
-	 * Mï¿½todo responsï¿½vel por setar as caixas de texto
+	 * Método responsável por setar as caixas de texto
 	 * de acordo com os campos da tabela
 	 */
 	private void setarCaixasTexto() {
-		// Criar uma variÃ¡vel para receber a linha da tabela
+		// Criar uma variável para receber a linha da tabela
 		int setar = tblClientes.getSelectedRow();
 		txtCliId.setText(tblClientes.getModel().getValueAt(setar, 0).toString());
 	}
@@ -443,10 +443,10 @@ public class Cliente extends JDialog {
 	}
 	
 	/**
-	 * MÃ©todo responsÃ¡vel de pesquisar
+	 * Método responsável de pesquisar
 	 */
 	private void pesquisarCliente() {
-		// Validaï¿½ï¿½o
+		// Validação
 		if (txtCliId.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Digite o ID do cliente");
 			txtCliId.requestFocus();
@@ -476,7 +476,8 @@ public class Cliente extends JDialog {
 					btnExcluir.setEnabled(true);
 					btnCliCEP.setEnabled(true);
 				} else {
-					JOptionPane.showMessageDialog(null, "Cliente nÃ£o cadastrado");
+					JOptionPane.showMessageDialog(null, "Cliente não cadastrado");
+					btnCliCEP.setEnabled(true);
 					limparCampos();
 					btnAdicionar.setEnabled(true);
 				}
@@ -488,10 +489,10 @@ public class Cliente extends JDialog {
 	}
 	
 	/**
-	 * MÃ©todo responsÃ¡vel por adicionar
+	 * Método responsável por adicionar
 	 */
 	private void adicionarCliente() {
-		// Validaï¿½ï¿½o
+		// Validação
 		
 		if (txtCliNome.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Digite o nome do cliente");
@@ -503,17 +504,17 @@ public class Cliente extends JDialog {
 			JOptionPane.showMessageDialog(null, "Digite a data de nascimento do cliente");
 			txtCliData.requestFocus();	
 		}	else if (cboCliMarketing.getSelectedItem().equals("")) {
-			JOptionPane.showMessageDialog(null, "Selecione a opÃ§Ã£o de marketing do cliente");
+			JOptionPane.showMessageDialog(null, "Selecione a opção de marketing do cliente");
 			cboCliMarketing.requestFocus();			
 		}	else {
-			// LÃ³gica Principal
+			// Lógica Principal
 			String create = "insert into clientes(nome, fone, datanasc, cpf, email, marketing, cep, endereco, numero, complemento, bairro, cidade, uf) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			try {
-				// Estabelecer a conexÃ£o
+				// Estabelecer a conexão
 				Connection con = dao.conectar();
-				// Preparar a execuÃ§Ã£o da query
+				// Preparar a execuçãoo da query
 				PreparedStatement pst = con.prepareStatement(create);
-				// Substituir o ???? pelo conteÃºdo da caixa de texto
+				// Substituir o ???? pelo conteúdo da caixa de texto
 				pst.setString(1, txtCliNome.getText());
 				pst.setString(2, txtCliFone.getText());
 				pst.setString(3, txtCliData.getText());
@@ -527,9 +528,9 @@ public class Cliente extends JDialog {
 				pst.setString(11, txtCliBairro.getText());
 				pst.setString(12, txtCliCidade.getText());
 				pst.setString(13, cboCliUF.getSelectedItem().toString());
-				// Executar a query e inserir o usuÃ¡rio no banco
+				// Executar a query e inserir o usuário no banco
 				pst.executeUpdate();
-				// Encerrar a conexÃ£o
+				// Encerrar a conexão
 				JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso");
 				limparCampos();
 				con.close();
@@ -546,10 +547,10 @@ public class Cliente extends JDialog {
 	}
 	
 	/**
-	 * MÃ©todo responsÃ¡vel por alterar
+	 * Método responsável por alterar
 	 */
 	private void alterarCliente() {
-		// ValidaÃ§Ã£o
+		// Validação
 		
 		if (txtCliNome.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Digite o nome do cliente");
@@ -561,17 +562,17 @@ public class Cliente extends JDialog {
 			JOptionPane.showMessageDialog(null, "Digite a data de nascimento do cliente");
 			txtCliData.requestFocus();	
 		}	else if (cboCliMarketing.getSelectedItem().equals("")) {
-			JOptionPane.showMessageDialog(null, "Selecione a opÃ§Ã£o de marketing do cliente");
+			JOptionPane.showMessageDialog(null, "Selecione a opção de marketing do cliente");
 			cboCliMarketing.requestFocus();			
 		}	else {
-			// Lï¿½gica Principal
+			// Lógica Principal
 			String update = "update clientes set nome=?, fone=?, datanasc=?, cpf=?, email=?, marketing=?, cep=?, endereco=?, numero=?, complemento=?, bairro=?, cidade=?, uf=? where idcli=?";
 			try {
-				// Estabelecer a conexï¿½o
+				// Estabelecer a conexão
 				Connection con = dao.conectar();
-				// Preparar a execuï¿½ï¿½o da query
+				// Preparar a execução da query
 				PreparedStatement pst = con.prepareStatement(update);
-				// Substituir o ???? pelo conteï¿½do da caixa de texto
+				// Substituir o ???? pelo conteúdo da caixa de texto
 				pst.setString(1, txtCliNome.getText());
 				pst.setString(2, txtCliFone.getText());
 				pst.setString(3, txtCliData.getText());
@@ -586,14 +587,14 @@ public class Cliente extends JDialog {
 				pst.setString(12, txtCliCidade.getText());
 				pst.setString(13, cboCliUF.getSelectedItem().toString());
 				pst.setString(14, txtCliId.getText());
-				// Executar a query e inserir o usuï¿½rio no banco
+				// Executar a query e inserir o usuário no banco
 				pst.executeUpdate();
-				// Encerrar a conexï¿½o
+				// Encerrar a conexão
 				JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
 				limparCampos();
 				con.close();
 			} catch(SQLIntegrityConstraintViolationException ex) {
-				JOptionPane.showMessageDialog(null, "CPF em uso.\nEscolha outro cpf.");
+				JOptionPane.showMessageDialog(null, "CPF em uso.\nEscolha outro CPF.");
 				txtCliCPF.setText(null);
 				txtCliCPF.requestFocus();
 			} catch (Exception e) {
@@ -605,21 +606,21 @@ public class Cliente extends JDialog {
 	}
 	
 	private void excluirCliente() {
-		// ValidaÃ§Ã£o (confirmaÃ§Ã£o de exclusÃ£o)
-		int confirma = JOptionPane.showConfirmDialog(null, "Deseja confirmar a exclusÃ£o do cliente ?","AtenÃ§Ã£o!",JOptionPane.YES_NO_OPTION);
+		// Validação (confirmação de exclusão)
+		int confirma = JOptionPane.showConfirmDialog(null, "Deseja confirmar a exclusão do cliente ?","Atenção!",JOptionPane.YES_NO_OPTION);
 		if (confirma == JOptionPane.YES_OPTION) {
-			// LÃ³gica principal 
+			// Lógica principal 
 			String delete = "delete from clientes where idcli=?";
 			try {
-				// Estabelecer a conexï¿½o
+				// Estabelecer a conexão
 				Connection con = dao.conectar();
-				// Preparar a execuï¿½ï¿½o da query
+				// Preparar a execução da query
 				PreparedStatement pst = con.prepareStatement(delete);
 				pst.setString(1, txtCliId.getText());
-				// Executar a query e inserir o usuï¿½rio no banco
+				// Executar a query e inserir o usuário no banco
 				pst.executeUpdate();
-				// Encerrar a conexï¿½o
-				JOptionPane.showMessageDialog(null, "Cliente excluido com sucesso!");
+				// Encerrar a conexão
+				JOptionPane.showMessageDialog(null, "Cliente excluído com sucesso!");
 				limparCampos();
 				con.close();
 			} catch (Exception e) {
@@ -650,4 +651,4 @@ public class Cliente extends JDialog {
 		btnAlterar.setEnabled(false);
 		btnExcluir.setEnabled(false);
 	}
-}// fim do cÃ³digo
+}// fim do código

@@ -4,29 +4,29 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
- * Classe modelo - Conexï¿½o com o banco de dados
+ * Classe modelo - Conexão com o banco de dados
  * @author gustavo.rdboamorte
  *
  */
 public class DAO {
-	// Parï¿½metros de conexï¿½o
+	// Parâmetros de conexão
 	private String driver="com.mysql.cj.jdbc.Driver";
-	private String url="jdbc:mysql://192.168.0.115:3306/lojask8";
+	private String url="jdbc:mysql://10.26.49.129:3306/lojask8";
 	private String user="root";
 	private String password="123@senac";
 	
 	/**
-	 * Mï¿½todo responsï¿½vel pela conexï¿½o
+	 * Método responsável pela conexão
 	 * @return con / null
 	 */
 	public Connection conectar() {
-		// Objeto usado para conexï¿½o
+		// Objeto usado para conexão
 		Connection con = null;
-		// Tratamento de exceï¿½ï¿½es
+		// Tratamento de exceçõees
 		try {
 			// Uso do driver
 			Class.forName(driver);
-			// Estabelecer a conexï¿½o
+			// Estabelecer a conexão
 			con = DriverManager.getConnection(url, user, password);
 			return con;
 		} catch (Exception e) {
