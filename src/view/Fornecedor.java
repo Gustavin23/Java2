@@ -507,6 +507,7 @@ public class Fornecedor extends JDialog {
 				PreparedStatement pst = con.prepareStatement(read);
 				pst.setString(1, txtForId.getText());
 				ResultSet rs = pst.executeQuery();
+				limparCampos();
 				if (rs.next()) {
 					txtForId.setText(rs.getString(1));
 					txtForCNPJ.setText(rs.getString(2));
@@ -527,9 +528,9 @@ public class Fornecedor extends JDialog {
 					cboForUF.setSelectedItem(rs.getString(17));
 					btnAlterar.setEnabled(true);
 					btnExcluir.setEnabled(true);
+					btnBuscarCep.setEnabled(true);
 				} else {
 					JOptionPane.showMessageDialog(null, "Fornecedor não cadastrado");
-					btnBuscarCep.setEnabled(true);
 					limparCampos();
 					btnAdicionar.setEnabled(true);
 				}
@@ -547,7 +548,7 @@ public class Fornecedor extends JDialog {
 			JOptionPane.showMessageDialog(null, "Digite o CNPJ do Fornecedor");
 			txtForCNPJ.requestFocus();
 		}	else if (txtForRazao.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Digite a raz�o social do fornecedor");
+			JOptionPane.showMessageDialog(null, "Digite a razão social do fornecedor");
 			txtForRazao.requestFocus();
 		}	else if (txtForFantasia.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Digite a fantasia do fornecedor");
@@ -559,7 +560,7 @@ public class Fornecedor extends JDialog {
 			JOptionPane.showMessageDialog(null, "Digite o CEP do fornecedor");
 			txtForCEP.requestFocus();
 		}	else if (txtForEndereco.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Digite o endere�o do fornecedor");
+			JOptionPane.showMessageDialog(null, "Digite o endereço do fornecedor");
 			txtForEndereco.requestFocus();
 		}	else if (txtForNumero.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Digite o numero do fornecedor");

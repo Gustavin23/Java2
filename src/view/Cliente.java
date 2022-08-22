@@ -474,9 +474,9 @@ public class Cliente extends JDialog {
 					cboCliUF.setSelectedItem(rs.getString(14));
 					btnAlterar.setEnabled(true);
 					btnExcluir.setEnabled(true);
+					btnCliCEP.setEnabled(true);
 				} else {
 					JOptionPane.showMessageDialog(null, "Cliente não cadastrado");
-					btnCliCEP.setEnabled(true);
 					limparCampos();
 					btnAdicionar.setEnabled(true);
 				}

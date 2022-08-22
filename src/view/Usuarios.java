@@ -245,6 +245,7 @@ public class Usuarios extends JDialog {
 				ResultSet rs = pst.executeQuery();
 				// Valida��o (exist�ncia de usuário)
 				// rs.next() -> existência de usuário
+				limparCampos();
 				if (rs.next()) {
 					// Preencher(setar) os campos do formulário
 					txtUsuId.setText(rs.getString(1));
