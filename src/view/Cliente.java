@@ -81,21 +81,22 @@ public class Cliente extends JDialog {
 		getContentPane().setLayout(null);
 		
 		JLabel lblFornecedor = new JLabel("ID do Cliente");
-		lblFornecedor.setBounds(321, 41, 85, 14);
+		lblFornecedor.setBounds(395, 141, 85, 14);
 		getContentPane().add(lblFornecedor);
 		
 		txtCliId = new JTextField();
+		txtCliId.setEditable(false);
 		txtCliId.setColumns(10);
-		txtCliId.setBounds(407, 38, 69, 20);
+		txtCliId.setBounds(490, 138, 69, 20);
 		getContentPane().add(txtCliId);
 		
 		JLabel lblNome = new JLabel("Nome");
-		lblNome.setBounds(72, 137, 69, 14);
+		lblNome.setBounds(72, 141, 69, 14);
 		getContentPane().add(lblNome);
 		
 		txtCliNome = new JTextField();
 		txtCliNome.setColumns(10);
-		txtCliNome.setBounds(171, 134, 204, 20);
+		txtCliNome.setBounds(171, 138, 204, 20);
 		getContentPane().add(txtCliNome);
 		
 		JLabel lblDataDeNascimento = new JLabel("Data de Nascimento");
@@ -131,7 +132,7 @@ public class Cliente extends JDialog {
 		
 		txtCliEmail = new JTextField();
 		txtCliEmail.setColumns(10);
-		txtCliEmail.setBounds(171, 258, 204, 20);
+		txtCliEmail.setBounds(171, 258, 235, 20);
 		getContentPane().add(txtCliEmail);
 		
 		JLabel lblCep = new JLabel("CEP");
@@ -140,7 +141,7 @@ public class Cliente extends JDialog {
 		
 		txtCliCEP = new JTextField();
 		txtCliCEP.setColumns(10);
-		txtCliCEP.setBounds(171, 341, 140, 20);
+		txtCliCEP.setBounds(155, 341, 156, 20);
 		getContentPane().add(txtCliCEP);
 		
 		btnCliCEP = new JButton("Buscar CEP");
@@ -159,18 +160,18 @@ public class Cliente extends JDialog {
 		btnCliCEP.setBounds(321, 340, 140, 23);
 		getContentPane().add(btnCliCEP);
 		
-		JLabel lblEndereo = new JLabel("Endere\u00E7o");
-		lblEndereo.setBounds(76, 381, 69, 14);
-		getContentPane().add(lblEndereo);
+		JLabel lblEndereco = new JLabel("Endereço");
+		lblEndereco.setBounds(76, 381, 69, 14);
+		getContentPane().add(lblEndereco);
 		
 		txtCliEndereco = new JTextField();
 		txtCliEndereco.setColumns(10);
-		txtCliEndereco.setBounds(171, 378, 251, 20);
+		txtCliEndereco.setBounds(155, 378, 267, 20);
 		getContentPane().add(txtCliEndereco);
 		
-		JLabel lblNmero = new JLabel("N\u00FAmero");
-		lblNmero.setBounds(432, 381, 49, 14);
-		getContentPane().add(lblNmero);
+		JLabel lblNumero = new JLabel("Número");
+		lblNumero.setBounds(432, 381, 49, 14);
+		getContentPane().add(lblNumero);
 		
 		txtCliNumero = new JTextField();
 		txtCliNumero.setColumns(10);
@@ -183,7 +184,7 @@ public class Cliente extends JDialog {
 		
 		txtCliComplemento = new JTextField();
 		txtCliComplemento.setColumns(10);
-		txtCliComplemento.setBounds(171, 409, 251, 20);
+		txtCliComplemento.setBounds(165, 409, 257, 20);
 		getContentPane().add(txtCliComplemento);
 		
 		JLabel lblBairro = new JLabel("Bairro");
@@ -192,7 +193,7 @@ public class Cliente extends JDialog {
 		
 		txtCliBairro = new JTextField();
 		txtCliBairro.setColumns(10);
-		txtCliBairro.setBounds(491, 409, 140, 20);
+		txtCliBairro.setBounds(491, 409, 161, 20);
 		getContentPane().add(txtCliBairro);
 		
 		JLabel lblCidade = new JLabel("Cidade");
@@ -201,7 +202,7 @@ public class Cliente extends JDialog {
 		
 		txtCliCidade = new JTextField();
 		txtCliCidade.setColumns(10);
-		txtCliCidade.setBounds(171, 437, 170, 20);
+		txtCliCidade.setBounds(155, 437, 186, 20);
 		getContentPane().add(txtCliCidade);
 		
 		JLabel lblUf = new JLabel("U.F");
@@ -284,7 +285,7 @@ public class Cliente extends JDialog {
 			}
 		});
 		txtPesquisarCliente.setColumns(10);
-		txtPesquisarCliente.setBounds(146, 38, 140, 20);
+		txtPesquisarCliente.setBounds(116, 38, 140, 20);
 		getContentPane().add(txtPesquisarCliente);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -296,7 +297,9 @@ public class Cliente extends JDialog {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Evento clicar com o mouse na tabela
+				limparCampos();
 				setarCaixasTexto();
+				limparCamposCliente();
 			}
 		});
 		scrollPane.setViewportView(tblClientes);
@@ -308,7 +311,7 @@ public class Cliente extends JDialog {
 				pesquisarCliente();
 			}
 		});
-		btnPesquisar.setBounds(486, 37, 89, 23);
+		btnPesquisar.setBounds(266, 37, 89, 23);
 		getContentPane().add(btnPesquisar);
 		
 		// Validação com o uso da biblioteca Atxy2k
@@ -332,16 +335,16 @@ public class Cliente extends JDialog {
 		validarCEP.setOnlyNums(true);
 		validarCEP.setLimit(8);
 		RestrictedTextField validarEndereco = new RestrictedTextField(txtCliEndereco);
-		validarEndereco.setLimit(150);
+		validarEndereco.setLimit(100);
 		RestrictedTextField validarNumero = new RestrictedTextField(txtCliNumero);
 		validarNumero.setOnlyNums(true);
 		validarNumero.setLimit(10);
 		RestrictedTextField validarComplemento = new RestrictedTextField(txtCliComplemento);
-		validarComplemento.setLimit(150);
+		validarComplemento.setLimit(100);
 		RestrictedTextField validarBairro = new RestrictedTextField(txtCliBairro);
-		validarBairro.setLimit(150);
+		validarBairro.setLimit(50);
 		RestrictedTextField validarCidade = new RestrictedTextField(txtCliCidade);
-		validarCidade.setLimit(150);
+		validarCidade.setLimit(50);
 		
 		getRootPane().setDefaultButton(btnPesquisar);
 
@@ -416,8 +419,13 @@ public class Cliente extends JDialog {
 			PreparedStatement pst = con.prepareStatement(readT);
 			pst.setString(1, txtPesquisarCliente.getText() + "%");
 			ResultSet rs = pst.executeQuery();
-			// Uso da biblioteca rs2xml para "popular" a tabela
-			tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
+			//if(rs.next()) {
+				// Uso da biblioteca rs2xml para "popular" a tabela
+				tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
+				
+			//} else {
+			//	btnAdicionar.setEnabled(true);
+			//}
 			con.close();
 			
 		} catch (Exception e) {
@@ -433,6 +441,8 @@ public class Cliente extends JDialog {
 		// Criar uma variável para receber a linha da tabela
 		int setar = tblClientes.getSelectedRow();
 		txtCliId.setText(tblClientes.getModel().getValueAt(setar, 0).toString());
+		txtCliNome.setText(tblClientes.getModel().getValueAt(setar, 1).toString());
+		txtPesquisarCliente.setText(tblClientes.getModel().getValueAt(setar, 1).toString());
 	}
 	
 	/**
@@ -447,16 +457,17 @@ public class Cliente extends JDialog {
 	 */
 	private void pesquisarCliente() {
 		// Validação
-		if (txtCliId.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Digite o ID do cliente");
-			txtCliId.requestFocus();
+		if (txtPesquisarCliente.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Digite o nome do cliente");
+			txtPesquisarCliente.requestFocus();
 		} else {
-			String read = "select * from clientes where idcli = ?";
+			String read = "select * from clientes where nome = ?";
 			try {
 				Connection con = dao.conectar();
 				PreparedStatement pst = con.prepareStatement(read);
-				pst.setString(1, txtCliId.getText());
+				pst.setString(1, txtPesquisarCliente.getText());
 				ResultSet rs = pst.executeQuery();
+				limparCampos();
 				if (rs.next()) {
 					txtCliId.setText(rs.getString(1));
 					txtCliNome.setText(rs.getString(2));
@@ -477,6 +488,7 @@ public class Cliente extends JDialog {
 					btnCliCEP.setEnabled(true);
 				} else {
 					JOptionPane.showMessageDialog(null, "Cliente não cadastrado");
+					limparCamposCliente();
 					btnCliCEP.setEnabled(true);
 					limparCampos();
 					btnAdicionar.setEnabled(true);
@@ -591,6 +603,7 @@ public class Cliente extends JDialog {
 				pst.executeUpdate();
 				// Encerrar a conexão
 				JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
+				limparCamposCliente();
 				limparCampos();
 				con.close();
 			} catch(SQLIntegrityConstraintViolationException ex) {
@@ -621,6 +634,7 @@ public class Cliente extends JDialog {
 				pst.executeUpdate();
 				// Encerrar a conexão
 				JOptionPane.showMessageDialog(null, "Cliente excluído com sucesso!");
+				limparCamposCliente();
 				limparCampos();
 				con.close();
 			} catch (Exception e) {
@@ -634,6 +648,7 @@ public class Cliente extends JDialog {
 	
 	
 	private void limparCampos() {
+		txtPesquisarCliente.setText(null);
 		txtCliNome.setText(null);
 		txtCliFone.setText(null);
 		txtCliData.setText(null);
@@ -646,6 +661,7 @@ public class Cliente extends JDialog {
 		txtCliComplemento.setText(null);
 		txtCliBairro.setText(null);
 		txtCliCidade.setText(null);
+		txtCliId.setText(null);
 		cboCliUF.setSelectedItem("");
 		btnAdicionar.setEnabled(false);
 		btnAlterar.setEnabled(false);

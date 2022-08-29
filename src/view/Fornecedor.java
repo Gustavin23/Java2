@@ -116,30 +116,30 @@ public class Fornecedor extends JDialog {
 		getContentPane().add(btnNewButton_3);
 		
 		JLabel lblCnpj = new JLabel("CNPJ");
-		lblCnpj.setBounds(50, 174, 69, 14);
+		lblCnpj.setBounds(50, 202, 69, 14);
 		getContentPane().add(lblCnpj);
 		
 		txtForCNPJ = new JTextField();
 		txtForCNPJ.setColumns(10);
-		txtForCNPJ.setBounds(135, 171, 170, 20);
+		txtForCNPJ.setBounds(135, 199, 170, 20);
 		getContentPane().add(txtForCNPJ);
 		
 		JLabel lblIe = new JLabel("I.M");
-		lblIe.setBounds(50, 205, 69, 14);
+		lblIe.setBounds(50, 233, 69, 14);
 		getContentPane().add(lblIe);
 		
 		txtForIM = new JTextField();
 		txtForIM.setColumns(10);
-		txtForIM.setBounds(135, 202, 170, 20);
+		txtForIM.setBounds(135, 230, 170, 20);
 		getContentPane().add(txtForIM);
 		
 		JLabel lblIm = new JLabel("Fantasia");
-		lblIm.setBounds(50, 233, 69, 14);
+		lblIm.setBounds(50, 174, 81, 14);
 		getContentPane().add(lblIm);
 		
 		txtForFantasia = new JTextField();
 		txtForFantasia.setColumns(10);
-		txtForFantasia.setBounds(135, 230, 170, 20);
+		txtForFantasia.setBounds(135, 171, 170, 20);
 		getContentPane().add(txtForFantasia);
 		
 		JLabel lblRazo = new JLabel("Fone");
@@ -175,13 +175,13 @@ public class Fornecedor extends JDialog {
 		txtForEmail.setBounds(135, 292, 170, 20);
 		getContentPane().add(txtForEmail);
 		
-		JLabel lblEndereo = new JLabel("Endere\u00E7o");
-		lblEndereo.setBounds(50, 377, 69, 14);
-		getContentPane().add(lblEndereo);
+		JLabel lblEndereco = new JLabel("Endereço");
+		lblEndereco.setBounds(50, 377, 69, 14);
+		getContentPane().add(lblEndereco);
 		
 		txtForEndereco = new JTextField();
 		txtForEndereco.setColumns(10);
-		txtForEndereco.setBounds(135, 374, 207, 20);
+		txtForEndereco.setBounds(122, 374, 220, 20);
 		getContentPane().add(txtForEndereco);
 		
 		JLabel lblComplemento = new JLabel("Complemento");
@@ -195,12 +195,12 @@ public class Fornecedor extends JDialog {
 		
 		txtForCEP = new JTextField();
 		txtForCEP.setColumns(10);
-		txtForCEP.setBounds(135, 337, 140, 20);
+		txtForCEP.setBounds(122, 337, 153, 20);
 		getContentPane().add(txtForCEP);
 		
-		JLabel lblNmero = new JLabel("N\u00FAmero");
-		lblNmero.setBounds(352, 377, 49, 14);
-		getContentPane().add(lblNmero);
+		JLabel lblNumero = new JLabel("Número");
+		lblNumero.setBounds(352, 377, 49, 14);
+		getContentPane().add(lblNumero);
 		
 		txtForNumero = new JTextField();
 		txtForNumero.setColumns(10);
@@ -213,7 +213,7 @@ public class Fornecedor extends JDialog {
 		
 		txtForBairro = new JTextField();
 		txtForBairro.setColumns(10);
-		txtForBairro.setBounds(411, 405, 140, 20);
+		txtForBairro.setBounds(411, 405, 170, 20);
 		getContentPane().add(txtForBairro);
 		
 		JLabel lblCidade = new JLabel("Cidade");
@@ -222,7 +222,7 @@ public class Fornecedor extends JDialog {
 		
 		txtForCidade = new JTextField();
 		txtForCidade.setColumns(10);
-		txtForCidade.setBounds(135, 433, 170, 20);
+		txtForCidade.setBounds(122, 433, 183, 20);
 		getContentPane().add(txtForCidade);
 		
 		JLabel lblUf = new JLabel("U.F");
@@ -247,9 +247,9 @@ public class Fornecedor extends JDialog {
 		lblSite.setBounds(315, 233, 49, 14);
 		getContentPane().add(lblSite);
 		
-		JLabel lblRazo_1 = new JLabel("Raz\u00E3o");
-		lblRazo_1.setBounds(316, 205, 49, 14);
-		getContentPane().add(lblRazo_1);
+		JLabel lblRazao = new JLabel("Razão");
+		lblRazao.setBounds(316, 205, 49, 14);
+		getContentPane().add(lblRazao);
 		
 		JLabel lblIe_1 = new JLabel("I.E");
 		lblIe_1.setBounds(316, 174, 49, 14);
@@ -333,6 +333,7 @@ public class Fornecedor extends JDialog {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Evento clicar com o mouse na tabela
+				limparCampos();
 				setarCaixasTexto();
 				limparCamposFornecedor();
 			}
@@ -340,8 +341,9 @@ public class Fornecedor extends JDialog {
 		scrollPane.setViewportView(tblFornecedores);
 		
 		txtForId = new JTextField();
+		txtForId.setEditable(false);
 		txtForId.setColumns(10);
-		txtForId.setBounds(488, 33, 55, 20);
+		txtForId.setBounds(603, 171, 55, 20);
 		getContentPane().add(txtForId);
 		
 		JButton btnPesquisar = new JButton("Buscar");
@@ -351,11 +353,11 @@ public class Fornecedor extends JDialog {
 				pesquisarFornecedor();
 			}
 		});
-		btnPesquisar.setBounds(553, 32, 89, 23);
+		btnPesquisar.setBounds(297, 34, 89, 23);
 		getContentPane().add(btnPesquisar);
 		
 		JLabel lblIe_1_1 = new JLabel("ID");
-		lblIe_1_1.setBounds(446, 36, 32, 14);
+		lblIe_1_1.setBounds(569, 174, 32, 14);
 		getContentPane().add(lblIe_1_1);
 		
 		// Validação com o uso da biblioteca Atxy2k
@@ -372,11 +374,11 @@ public class Fornecedor extends JDialog {
 				validarIM.setOnlyNums(true);
 				validarIM.setLimit(14);
 				RestrictedTextField validarRazao = new RestrictedTextField(txtForRazao);
-				validarRazao.setLimit(255);
+				validarRazao.setLimit(50);
 				RestrictedTextField validarFantasia = new RestrictedTextField(txtForFantasia);
-				validarFantasia.setLimit(255);
+				validarFantasia.setLimit(60);
 				RestrictedTextField validarSite = new RestrictedTextField(txtForSite);
-				validarSite.setLimit(255);
+				validarSite.setLimit(50);
 				RestrictedTextField validarFone = new RestrictedTextField(txtForFone);
 				validarFone.setOnlyNums(true);
 				validarFone.setLimit(12);
@@ -388,16 +390,16 @@ public class Fornecedor extends JDialog {
 				validarCEP.setOnlyNums(true);
 				validarCEP.setLimit(8);
 				RestrictedTextField validarEndereco = new RestrictedTextField(txtForEndereco);
-				validarEndereco.setLimit(150);
+				validarEndereco.setLimit(100);
 				RestrictedTextField validarNumero = new RestrictedTextField(txtForNumero);
 				validarNumero.setOnlyNums(true);
 				validarNumero.setLimit(10);
 				RestrictedTextField validarComplemento = new RestrictedTextField(txtForComplemento);
-				validarComplemento.setLimit(150);
+				validarComplemento.setLimit(100);
 				RestrictedTextField validarBairro = new RestrictedTextField(txtForBairro);
-				validarBairro.setLimit(150);
+				validarBairro.setLimit(50);
 				RestrictedTextField validarCidade = new RestrictedTextField(txtForCidade);
-				validarCidade.setLimit(150);
+				validarCidade.setLimit(50);
 		
 				getRootPane().setDefaultButton(btnPesquisar);
 				
@@ -483,6 +485,12 @@ public class Fornecedor extends JDialog {
 		// Criar uma variável para receber a linha da tabela
 		int setar = tblFornecedores.getSelectedRow();
 		txtForId.setText(tblFornecedores.getModel().getValueAt(setar, 0).toString());
+		txtForFantasia.setText(tblFornecedores.getModel().getValueAt(setar, 1).toString());
+		txtPesquisarFornecedor.setText(tblFornecedores.getModel().getValueAt(setar, 1).toString());
+		txtForFone.setText(tblFornecedores.getModel().getValueAt(setar, 2).toString());
+		txtForContato.setText(tblFornecedores.getModel().getValueAt(setar, 3).toString());
+
+		
 	}
 	
 	/**
@@ -498,15 +506,15 @@ public class Fornecedor extends JDialog {
 	 */
 	private void pesquisarFornecedor() {
 		// Validação
-		if (txtForId.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Digite o ID do fornecedor");
-			txtForId.requestFocus();
+		if (txtPesquisarFornecedor.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Digite o nome fantasia do fornecedor");
+			txtPesquisarFornecedor.requestFocus();
 		} else {
-			String read = "select * from fornecedores where idfor = ?";
+			String read = "select * from fornecedores where fantasia = ?";
 			try {
 				Connection con = dao.conectar();
 				PreparedStatement pst = con.prepareStatement(read);
-				pst.setString(1, txtForId.getText());
+				pst.setString(1, txtPesquisarFornecedor.getText());
 				ResultSet rs = pst.executeQuery();
 				limparCampos();
 				if (rs.next()) {
@@ -532,6 +540,7 @@ public class Fornecedor extends JDialog {
 					btnBuscarCep.setEnabled(true);
 				} else {
 					JOptionPane.showMessageDialog(null, "Fornecedor não cadastrado");
+					limparCamposFornecedor();
 					btnBuscarCep.setEnabled(true);
 					limparCampos();
 					btnAdicionar.setEnabled(true);
@@ -607,6 +616,7 @@ public class Fornecedor extends JDialog {
 				pst.executeUpdate();
 				// Encerrar a conexão
 				JOptionPane.showMessageDialog(null, "Fornecedor cadastrado com sucesso");
+				limparCamposFornecedor();
 				limparCampos();
 				con.close();
 			} catch(SQLIntegrityConstraintViolationException ex) {
@@ -685,10 +695,11 @@ public class Fornecedor extends JDialog {
 				pst.executeUpdate();
 				// Encerrar a conexão
 				JOptionPane.showMessageDialog(null, "Fornecedor alterado com sucesso");
+				limparCamposFornecedor();
 				limparCampos();
 				con.close();
 			} catch(SQLIntegrityConstraintViolationException ex) {
-				JOptionPane.showMessageDialog(null, "CNPJ em uso.\nEscolha outro CPNJ.");
+				JOptionPane.showMessageDialog(null, "CNPJ ou IE ou IM duplicado.\nEscolha outro.");
 				txtForCNPJ.setText(null);
 				txtForCNPJ.requestFocus();
 			} catch (Exception e) {
@@ -715,6 +726,7 @@ public class Fornecedor extends JDialog {
 				pst.executeUpdate();
 				// Encerrar a conexão
 				JOptionPane.showMessageDialog(null, "Fornecedor excluído com sucesso!");
+				limparCamposFornecedor();
 				limparCampos();
 				con.close();
 			} catch (Exception e) {
@@ -726,11 +738,12 @@ public class Fornecedor extends JDialog {
 	
 	
 	private void limparCampos() {
+		txtPesquisarFornecedor.setText(null);
+		txtForFantasia.setText(null);
 		txtForCNPJ.setText(null);
 		txtForIE.setText(null);
 		txtForIM.setText(null);
 		txtForRazao.setText(null);
-		txtForFantasia.setText(null);
 		txtForSite.setText(null);
 		txtForFone.setText(null);
 		txtForContato.setText(null);
@@ -747,5 +760,6 @@ public class Fornecedor extends JDialog {
 		btnAlterar.setEnabled(false);
 		btnExcluir.setEnabled(false);
 	}
+	
 	
 } // Fim do código
