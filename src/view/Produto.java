@@ -1,43 +1,41 @@
 package view;
 
+import java.awt.Cursor;
 import java.awt.EventQueue;
-
-import javax.swing.JDialog;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
 import Atxy2k.CustomTextField.RestrictedTextField;
 import model.DAO;
 import net.proteanit.sql.DbUtils;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextPane;
-import javax.swing.border.CompoundBorder;
-import java.awt.Cursor;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JTextArea;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class Produto extends JDialog {
 	private JTextField txtBarcode;
@@ -87,6 +85,15 @@ public class Produto extends JDialog {
 		getContentPane().add(lblNewLabel);
 		
 		txtBarcode = new JTextField();
+		txtBarcode.addKeyListener(new KeyAdapter() {
+			@Override
+			//evento usado no leitor de código de barras
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				pesquisarProdutoBarcode();
+				}
+			}
+		});
 		txtBarcode.setBounds(112, 50, 294, 20);
 		getContentPane().add(txtBarcode);
 		txtBarcode.setColumns(10);
@@ -260,38 +267,30 @@ public class Produto extends JDialog {
 		txtLocal.setBounds(112, 405, 294, 20);
 		getContentPane().add(txtLocal);
 		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(521, 209, 108, 20);
-		getContentPane().add(dateChooser);
+		dataEntrada = new JDateChooser();
+		dataEntrada.setBounds(521, 209, 171, 20);
+		getContentPane().add(dataEntrada);
 		
 		JLabel lblNewLabel_1_1_1_2 = new JLabel("Entrada");
 		lblNewLabel_1_1_1_2.setBounds(457, 215, 64, 14);
 		getContentPane().add(lblNewLabel_1_1_1_2);
 		
-		JLabel lblNewLabel_1_1_1_2_1 = new JLabel("Validade");
-		lblNewLabel_1_1_1_2_1.setBounds(647, 215, 64, 14);
-		getContentPane().add(lblNewLabel_1_1_1_2_1);
-		
-		JDateChooser dateChooser_1 = new JDateChooser();
-		dateChooser_1.setBounds(711, 209, 108, 20);
-		getContentPane().add(dateChooser_1);
-		
 		txtCusto = new JTextField();
 		txtCusto.setColumns(10);
-		txtCusto.setBounds(521, 251, 96, 20);
+		txtCusto.setBounds(521, 240, 96, 20);
 		getContentPane().add(txtCusto);
 		
 		JLabel lblNewLabel_1_1_1_2_2 = new JLabel("Custo");
-		lblNewLabel_1_1_1_2_2.setBounds(457, 254, 64, 14);
+		lblNewLabel_1_1_1_2_2.setBounds(457, 243, 64, 14);
 		getContentPane().add(lblNewLabel_1_1_1_2_2);
 		
 		JLabel lblNewLabel_1_1_1_2_2_1 = new JLabel("Lucro(%)");
-		lblNewLabel_1_1_1_2_2_1.setBounds(647, 254, 64, 14);
+		lblNewLabel_1_1_1_2_2_1.setBounds(647, 243, 64, 14);
 		getContentPane().add(lblNewLabel_1_1_1_2_2_1);
 		
 		txtLucro = new JTextField();
 		txtLucro.setColumns(10);
-		txtLucro.setBounds(711, 251, 96, 20);
+		txtLucro.setBounds(711, 240, 96, 20);
 		getContentPane().add(txtLucro);
 		
 		txtDescricao = new JTextArea();
@@ -308,46 +307,46 @@ public class Produto extends JDialog {
 		getContentPane().add(cboSetor);
 		
 		JLabel lblNewLabel_1_1_1_2_2_2 = new JLabel("Venda");
-		lblNewLabel_1_1_1_2_2_2.setBounds(457, 289, 64, 14);
+		lblNewLabel_1_1_1_2_2_2.setBounds(457, 278, 64, 14);
 		getContentPane().add(lblNewLabel_1_1_1_2_2_2);
 		
 		txtVenda = new JTextField();
 		txtVenda.setColumns(10);
-		txtVenda.setBounds(521, 286, 96, 20);
+		txtVenda.setBounds(521, 275, 96, 20);
 		getContentPane().add(txtVenda);
 
 		
 		// Validação com o uso da biblioteca Atxy2k
 		RestrictedTextField validarId = new RestrictedTextField(txtID);
 		validarId.setOnlyNums(true);
-		validarId.setLimit(4);
-		RestrictedTextField validarCNPJ = new RestrictedTextField(txtBarcode);
-		validarCNPJ.setOnlyNums(true);
-		validarCNPJ.setLimit(13);
-		RestrictedTextField validarIE = new RestrictedTextField(txtProduto);
-		validarIE.setLimit(100);
-		RestrictedTextField validarIM = new RestrictedTextField(txtDescricao);
-		validarIM.setLimit(100);
-		RestrictedTextField validarRazao = new RestrictedTextField(txtFabricante);
-		validarRazao.setLimit(100);
-		RestrictedTextField validarSite = new RestrictedTextField(txtEstoque);
-		validarCNPJ.setOnlyNums(true);
-		validarSite.setLimit(5);
-		RestrictedTextField validarFone = new RestrictedTextField(txtEstoqueMinimo);
-		validarFone.setOnlyNums(true);
-		validarFone.setLimit(5);
-		RestrictedTextField validarContato = new RestrictedTextField(txtLocal);
-		validarContato.setLimit(50);
-		RestrictedTextField validarEmail = new RestrictedTextField(txtCusto);
-		validarEmail.setLimit(50);
-		RestrictedTextField validarCEP = new RestrictedTextField(txtLucro);
-		validarCEP.setOnlyNums(true);
-		validarCEP.setLimit(8);
-		RestrictedTextField validarEndereco = new RestrictedTextField(txtVenda);
-		validarEndereco.setLimit(100);
-		RestrictedTextField validarNumero = new RestrictedTextField(txtForID);
-		validarNumero.setOnlyNums(true);
-		validarNumero.setLimit(10);
+		validarId.setLimit(8);
+		RestrictedTextField validarBarcode = new RestrictedTextField(txtBarcode);
+		validarId.setOnlyNums(true);
+		validarBarcode.setLimit(13);
+		RestrictedTextField validarProduto = new RestrictedTextField(txtProduto);
+		validarProduto.setLimit(100);
+		RestrictedTextField validarFabricante = new RestrictedTextField(txtFabricante);
+		validarFabricante.setLimit(100);
+		RestrictedTextField validarEstoque = new RestrictedTextField(txtEstoque);
+		validarEstoque.setOnlyNums(true);
+		validarEstoque.setLimit(5);
+		RestrictedTextField validarEstoqueMinimo = new RestrictedTextField(txtEstoqueMinimo);
+		validarEstoqueMinimo.setOnlyNums(true);
+		validarEstoqueMinimo.setLimit(5);
+		RestrictedTextField validarLocal = new RestrictedTextField(txtLocal);
+		validarLocal.setLimit(50);
+		RestrictedTextField validarCusto = new RestrictedTextField(txtCusto);
+		validarCusto.setOnlyNums(true);
+		validarCusto.setLimit(50);
+		RestrictedTextField validarLucro = new RestrictedTextField(txtLucro);
+		validarLucro.setOnlyNums(true);
+		validarLucro.setLimit(8);
+		RestrictedTextField validarVenda = new RestrictedTextField(txtVenda);
+		validarVenda.setOnlyNums(true);
+		validarVenda.setLimit(8);
+		RestrictedTextField validarForId = new RestrictedTextField(txtForID);
+		validarForId.setOnlyNums(true);
+		validarForId.setLimit(4);
 
 		
 	}//Fim do construtor
@@ -363,6 +362,7 @@ public class Produto extends JDialog {
 	private JButton btnNewButton;
 	private JButton btnProAlterar;
 	private JButton btnRemover;
+	private JDateChooser dataEntrada;
 	
 	/**
 	 * Método responsável pela pesquisa avançada do Fornecedor
@@ -397,9 +397,61 @@ public class Produto extends JDialog {
 	}
 	
 	/**
+	 * Método responsavel por pesquisar por código de barra
+	 */
+	private void pesquisarProdutoBarcode() {
+		if (txtBarcode.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, "Escaneie o código de barras do produto");
+		txtBarcode.requestFocus();
+		} else {
+		String read2 = "select * from produtos where barcode = ?";
+		try {
+			Connection con = dao.conectar();
+			PreparedStatement pst = con.prepareStatement(read2);
+			pst.setString(1, txtBarcode.getText());
+			ResultSet rs = pst.executeQuery();
+			limparCampos();
+			if (rs.next()) {
+				txtID.setText(rs.getString(1));
+				txtBarcode.setText(rs.getString(2));
+				txtProduto.setText(rs.getString(3));
+				txtDescricao.setText(rs.getString(4));
+				txtFabricante.setText(rs.getString(5));
+				// JCalendar - formatação para exibição
+				String setarDataCad = rs.getString(6);
+				Date dataVal = new SimpleDateFormat("yyyy-MM-dd").parse(setarDataCad);
+				dataEntrada.setDate(dataVal);
+				cboSetor.setSelectedItem(rs.getString(7));
+				txtEstoque.setText(rs.getString(8));
+				txtEstoqueMinimo.setText(rs.getString(9));
+				cboUnidade.setSelectedItem(rs.getString(10));
+				txtLocal.setText(rs.getString(11));
+				txtCusto.setText(rs.getString(12));
+				txtLucro.setText(rs.getString(13));
+				txtVenda.setText(rs.getString(14));
+				txtForID.setText(rs.getString(15));
+				btnAlterar.setEnabled(true);
+				btnRemover.setEnabled(true);
+			} else {
+				JOptionPane.showMessageDialog(null, "Produto não cadastrado");
+				limparCampos();
+				btnAdicionar.setEnabled(true);
+			}
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+	}
+		}
+}
+	
+	/**
 	 * Método responsável pela pesquisa de Fornecedores
 	 */
 	private void pesquisarProduto() {
+			if (txtID.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Digite o ID do produto");
+			txtID.requestFocus();
+			} else {
 			String read = "select * from produtos where id = ?";
 			try {
 				Connection con = dao.conectar();
@@ -412,15 +464,19 @@ public class Produto extends JDialog {
 					txtProduto.setText(rs.getString(3));
 					txtDescricao.setText(rs.getString(4));
 					txtFabricante.setText(rs.getString(5));
-					cboSetor.setSelectedItem(rs.getString(8));
-					txtEstoque.setText(rs.getString(9));
-					txtEstoqueMinimo.setText(rs.getString(10));
-					cboUnidade.setSelectedItem(rs.getString(11));
-					txtLocal.setText(rs.getString(12));
-					txtCusto.setText(rs.getString(13));
-					txtLucro.setText(rs.getString(14));
-					txtVenda.setText(rs.getString(15));
-					txtForID.setText(rs.getString(16));
+					// JCalendar - formatação para exibição
+					String setarDataCad = rs.getString(6);
+					Date dataVal = new SimpleDateFormat("yyyy-MM-dd").parse(setarDataCad);
+					dataEntrada.setDate(dataVal);
+					cboSetor.setSelectedItem(rs.getString(7));
+					txtEstoque.setText(rs.getString(8));
+					txtEstoqueMinimo.setText(rs.getString(9));
+					cboUnidade.setSelectedItem(rs.getString(10));
+					txtLocal.setText(rs.getString(11));
+					txtCusto.setText(rs.getString(12));
+					txtLucro.setText(rs.getString(13));
+					txtVenda.setText(rs.getString(14));
+					txtForID.setText(rs.getString(15));
 					btnAlterar.setEnabled(true);
 					btnRemover.setEnabled(true);
 				} else {
@@ -431,8 +487,12 @@ public class Produto extends JDialog {
 				con.close();
 			} catch (Exception e) {
 				System.out.println(e);
-			}
 		}
+			}
+	}
+	
+	
+	
 	/**
 	 * Método Responsável por 
 	 */
@@ -479,6 +539,7 @@ public class Produto extends JDialog {
 				// Preparar a execução da query
 				PreparedStatement pst = con.prepareStatement(create);
 				// Substituir o ???? pelo conteúdo da caixa de texto
+				
 				pst.setString(1, txtBarcode.getText());
 				pst.setString(2, txtProduto.getText());
 				pst.setString(3, txtDescricao.getText());
@@ -496,6 +557,7 @@ public class Produto extends JDialog {
 				pst.executeUpdate();
 				// Encerrar a conexão
 				JOptionPane.showMessageDialog(null, "Fornecedor cadastrado com sucesso");
+				limparCamposFornecedor();
 				limparCampos();
 				con.close();
 			} catch(SQLIntegrityConstraintViolationException ex) {
@@ -533,7 +595,7 @@ public class Produto extends JDialog {
 			JOptionPane.showMessageDialog(null, "Digite o estoque do produto");
 			txtEstoque.requestFocus();
 		}	else if (txtEstoqueMinimo.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Digite o estoque mínimo do produto");
+			JOptionPane.showMessageDialog(null, "Digite o estoque minimo do produto");
 			txtEstoqueMinimo.requestFocus();
 		}	else if (cboUnidade.getSelectedItem().equals("")) {
 			JOptionPane.showMessageDialog(null, "Digite a unidade do produto");
@@ -572,7 +634,9 @@ public class Produto extends JDialog {
 				pst.executeUpdate();
 				// Encerrar a conexão
 				JOptionPane.showMessageDialog(null, "Produto alterado com sucesso");
+				limparCamposFornecedor();
 				limparCampos();
+				txtBarcode.setText(null);
 				con.close();
 			} catch(SQLIntegrityConstraintViolationException ex) {
 				JOptionPane.showMessageDialog(null, "Barcode duplicado escolha outro.");
@@ -602,7 +666,9 @@ public class Produto extends JDialog {
 				pst.executeUpdate();
 				// Encerrar a conexão
 				JOptionPane.showMessageDialog(null, "Produto excluído com sucesso!");
+				limparCamposFornecedor();
 				limparCampos();
+				txtBarcode.setText(null);
 				con.close();
 			} catch (Exception e) {
 				System.out.println(e);
@@ -612,7 +678,8 @@ public class Produto extends JDialog {
 	}
 	
 	private void limparCampos() {
-		txtBarcode.setText(null);
+		txtID.setText(null);
+		txtForID.setText(null);
 		txtProduto.setText(null);
 		txtDescricao.setText(null);
 		txtFabricante.setText(null);
@@ -624,8 +691,10 @@ public class Produto extends JDialog {
 		txtCusto.setText(null);
 		txtLucro.setText(null);
 		txtVenda.setText(null);
+		dataEntrada.setDate(null);
 		btnAdicionar.setEnabled(false);
 		btnAlterar.setEnabled(false);
 		btnRemover.setEnabled(false);
 	}
+	
 }// Fim do código
